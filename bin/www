@@ -1,33 +1,12 @@
 #!/usr/bin/env node
-
-/**
- * Module dependencies.
- */
-
 var app = require('../app');
 var debug = require('debug')('alexa:server');
 var http = require('http');
-
-/**
- * Get port from environment and store in Express.
- */
-
-var port = normalizePort(process.env.PORT || '3000');
-app.set('port', port);
-
-/**
- * Create HTTP server.
- */
+var localtunnel = require('localtunnel');
 
 var server = http.createServer(app);
+var input_port = process.env.PORT || '3000';
 
-/**
- * Listen on provided port, on all network interfaces.
- */
-
-server.listen(port);
-server.on('error', onError);
-server.on('listening', onListening);
 
 /**
  * Normalize a port into a number, string, or false.
@@ -88,3 +67,30 @@ function onListening() {
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
 }
+
+var tunnel_opts = {
+  subdomain: 'ltfxwxflbe'
+};
+var tunnel = localtunnel(input_port, tunnel_opts, function(err, tunnel) {
+  if (err) {
+    console.error('Error setting up tunnel', err);
+    throw err;
+  }
+
+  console.log('Tunneled on', tunnel.url);
+  var port = normalizePort(input_port);
+  app.set('port', port);
+
+  server.listen(port);
+  server.on('error', onError);
+  server.on('listening', onListening);
+  console.log('Server listening on', port);
+
+});
+
+tunnel.on('close', function() {
+  debug('Tunnel closed');
+  server.close(function() {
+    debug('Server closed due to tunnel closure');
+  });
+});
