@@ -52,8 +52,8 @@ router.post('/', function(req, res, next) {
         global.light = {};
       }
       var command = req.body.request.intent.slots.ENABLED;
-      console.log('Command', command);
-      global.light.command = command;
+      console.log('Command', command.value);
+      global.light.command = command.value;
       resp.response.outputSpeech.text = 'I turned ' + command.value + ' the light.';
       break;
     case 'MotionIntent': //Could only read
