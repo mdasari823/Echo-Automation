@@ -8,7 +8,7 @@ router.get('/light/command', function(req, res, next) {
   var respobj = {
     command: 'nothing'
   };
-  if (global.light && global.light.command != 'nothing') {
+  if (global.light && global.light.command && global.light.command != 'nothing') {
     console.log(global.light.command != 'nothing');
     var status = global.light.command;
     respobj.command = status;
