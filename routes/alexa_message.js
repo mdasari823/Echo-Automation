@@ -43,7 +43,7 @@ router.post('/', function(req, res, next) {
       resp.response.outputSpeech.text = 'I think the lights are off.';
       if (!_.isUndefined(global.light)) {
         console.log('Here');
-        resp.response.outputSpeech.text = (global.light.status) ? 'It\'s bright in here': 'I\m in the dark';
+        resp.response.outputSpeech.text = (global.light.status) ? 'It\'s bright in here': 'I am in the dark';
       }
       break;
     case 'LightIntent_WRITE':
