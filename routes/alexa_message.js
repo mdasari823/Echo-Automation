@@ -43,7 +43,7 @@ router.post('/', function(req, res, next) {
       resp.response.outputSpeech.text = 'I think the lights are off.';
       if (!_.isUndefined(global.light)) {
         console.log('Here');
-        resp.response.outputSpeech.text = (global.light.status) ? 'It\'s bright in here': 'I\m in the dark';
+        resp.response.outputSpeech.text = (global.light.status) ? 'It\'s bright in here': 'I am in the dark';
       }
       break;
     case 'LightIntent_WRITE':
@@ -61,7 +61,7 @@ router.post('/', function(req, res, next) {
       resp.response.outputSpeech.text = 'I don\'t know if there\'s anyone at home.';
       if (!_.isUndefined(global.motion)) {
         console.log('Here');
-        resp.response.outputSpeech.text = (global.motion.status) ? 'There\'s a monster in the closet': 'You\'re in a safe zone';
+        resp.response.outputSpeech.text = (global.motion.status) ? 'There\'s a monster in the closet': 'I am all by myself';
       }
       break;
     default:
