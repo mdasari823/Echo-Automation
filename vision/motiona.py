@@ -10,12 +10,22 @@ import threading
 import requests
 
 status_l = 'false'
+status_light = 'false'
 def foo():
 	global status_l
 	print('sending request '+status_l)
 	r = requests.post("https://ltfxwxflbe.localtunnel.me/camera/motion", data={'enabled': status_l})
 	print(r.text)
 	threading.Timer(5, foo).start()
+
+def bar():
+        global status_light
+	print('sending light status '+status_light)
+	r = requests.post("https://ltfxwxflbe.localtunnel.me/camera/light", data={'enabled': status_light})
+	print(r.text)
+	threading.Timer(5, bar).start()
+
+
 
 GPIO.cleanup()
 GPIO.setmode(GPIO.BOARD)
@@ -34,6 +44,7 @@ firstFrame = None
 
 #call periodic post  function
 foo()
+bar()
 
 print('testing ')
 # loop over the frames of the video
@@ -54,6 +65,14 @@ while True:
 	gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 	gray = cv2.GaussianBlur(gray, (21, 21), 0)
 
+	global status_light
+        print(gray.mean())
+	if gray.mean() > 50:
+		status_light = 'true'
+	else:
+		status_light = 'false'
+        #print gray.mean()
+
 	# if the first frame is None, initialize it
 	if firstFrame is None:
 		firstFrame = gray
@@ -73,7 +92,7 @@ while True:
 	# loop over the contours
 	for c in cnts:
 		# if the contour is too small, ignore it
-		if cv2.contourArea(c) < 250:
+		if cv2.contourArea(c) < 450:
 			continue
 
 		# compute the bounding box for the contour, draw it on the frame,
